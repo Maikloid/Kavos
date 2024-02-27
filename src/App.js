@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
 
 function App() {
+
+  const [kavy, nastavKavy] = useState([]);
+  const [selectedItem, setSelectedItem] = useState("");
+
+  useEffect(() => {
+    axios.get("https://api.sampleapis.com/coffee/hot")
+      .then(odpoved => {
+        nastavKavy(odpoved.data);
+      }
+      )
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    
+    <img style={{width : "50px"}} src={selectedItem.image}></img>
+    {selectedItem.title}
+
+      <Grid container spacing={2}>
+        {
+          kavy.map(kava => (
+            <>
+              <Grid item>
+                <Paper onClick = {() => setSelectedItem(kava)}><img style={{ width: "50px"}} src={kava.image}></img>
+                  {kava.title}
+                </Paper>
+
+              </Grid>
+            </>))
+
+        }</Grid></>
   );
 }
 
 export default App;
+
